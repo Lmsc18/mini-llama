@@ -1,7 +1,7 @@
 import torch
-from modules.multihead_attention import MultiHeadAttention
-from modules.rms_norm import RMSNorm
-from modules.swiglu import SWIGLU
+from .multihead_attention import MultiHeadAttention
+from .rms_norm import RMSNorm
+from .swiglu import SWIGLU
 
 
 class TransformerBlock(torch.nn.Module):

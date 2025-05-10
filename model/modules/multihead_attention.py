@@ -1,12 +1,12 @@
 import torch
-from modules.linear import Linear
-from modules.rope import RotaryPositionalEmbedding
-from modules.scaled_dot_product_attention import scaled_dot_product_attention
+from .linear import Linear
+from .rope import RotaryPositionalEmbedding
+from .scaled_dot_product_attention import scaled_dot_product_attention
 
 class MultiHeadAttention(torch.nn.Module):
     def __init__(self,config):
         super().__init__()
-        assert config.d_model % config.num_heads == 0, "d_model must be divisible by num_heads"
+        #assert config.d_model % config.num_heads == 0, "d_model must be divisible by num_heads"
         self.d_model=config.d_model
         self.num_heads=config.num_heads
         self.d_k=config.d_model//config.num_heads

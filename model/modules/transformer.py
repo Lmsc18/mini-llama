@@ -1,10 +1,11 @@
 import torch
 from dataclasses import dataclass
-from modules.embedding import Embedding
-from modules.transformer_block import TransformerBlock
-from modules.rms_norm import RMSNorm
-from modules.linear import Linear
+from .embedding import Embedding
+from .transformer_block import TransformerBlock
+from .rms_norm import RMSNorm
+from .linear import Linear
 import torch.nn as nn
+import torch.nn.functional as F
 
 class Transformer(torch.nn.Module):
     def __init__(self, config):
@@ -17,10 +18,12 @@ class Transformer(torch.nn.Module):
         self.norm=RMSNorm(config)
         self.lm_head=Linear(config.d_model,config.vocab_size)
 
-    def forward(self,ids):
+    def forward(self,ids,targets=None):
         x=self.tok_embed(ids)
         for layer in self.layers:
             x=layer(x)
         x=self.norm(x)
         logits=self.lm_head(x).float()
-        return logits
+        if targets is not None:
+            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
+        return logits, loss
