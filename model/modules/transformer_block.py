@@ -12,7 +12,7 @@ class TransformerBlock(torch.nn.Module):
         self.norm=RMSNorm(config)
         self.mha=MultiHeadAttention(config)
         self.swiglu=SWIGLU(config)
-    def forward(self,x):
-        mha_output=x+self.mha(self.norm(x))
+    def forward(self,x,freqs_cis):
+        mha_output=x+self.mha(self.norm(x),freqs_cis)
         out=mha_output+self.swiglu(self.norm(mha_output))
         return out
